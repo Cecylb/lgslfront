@@ -28,7 +28,10 @@ class Editor extends Component {
     }
 
     handleTextArea(event) {
-        this.setState({input: event.target.value, element: ""});
+        this.setState({
+            input: event.target.value,
+            element: ""
+        });
     }
 
     async handleSubmit(event) {
@@ -50,18 +53,18 @@ class Editor extends Component {
     }
 
     async handleElement(element, input, cursor) {
-        //ToDo Здесь темплейт будет добавляться в соответствии с позицией курсора
+        //ToDo Курсор меняется только при нажатии, не работает со стрелками
         await fetch(`/api/editor/${element}`)
             .then(response => response.text())
             .then(data => {
-                this.setState({input: input + data});
+                this.setState({input: input.slice(0, cursor) + data + input.slice(cursor, input.length)});
             });
         this.props.history.push('/editor');
     }
 
     render() {
         const {input, elements, didSubmit, isLoading, preview} = this.state;
-        const cursor = ""; //ToDo Найти способ передать локацию курсора
+        let cursor;
         if (isLoading) return <p>Loading...</p>;
             const list = elements.map(element => {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
@@ -91,7 +94,7 @@ class Editor extends Component {
                     <th width="50%">
                         <Form onSubmit={this.handleSubmit}>
                             <FormGroup>
-                                <Input type="textarea" value={input} onChange={this.handleTextArea} autoComplete="address-level1"/>
+                                <Input type="textarea" value={input} onClick={event => cursor = event.target.selectionStart} onChange={this.handleTextArea} autoComplete="address-level1"/>
                             </FormGroup>
                             <FormGroup>
                                 <Button color="success" type="submit">Compile</Button>{' '}
