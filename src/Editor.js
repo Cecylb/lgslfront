@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-
 import {PDFDownloadLink, View} from "@react-pdf/renderer";
 
 class Editor extends Component {
@@ -29,8 +28,7 @@ class Editor extends Component {
 
     handleTextArea(event) {
         this.setState({
-            input: event.target.value,
-            element: ""
+            input: event.target.value
         });
     }
 
@@ -47,19 +45,23 @@ class Editor extends Component {
             .then(response => response.arrayBuffer())
             .then(data => {
                 this.setState({ preview: new Blob([data], {type: 'application/pdf'}), didSubmit: true});
-                console.log("data", data)
             });
         this.props.history.push('/editor');
     }
 
     async handleElement(element, input, cursor) {
-        //ToDo Курсор меняется только при нажатии, не работает со стрелками
         await fetch(`/api/editor/${element}`)
             .then(response => response.text())
             .then(data => {
                 this.setState({input: input.slice(0, cursor) + data + input.slice(cursor, input.length)});
             });
         this.props.history.push('/editor');
+    }
+
+    async handleDownload(preview) {
+        let binaryData = [];
+        binaryData.push(preview);
+        window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}));
     }
 
     render() {
@@ -70,19 +72,15 @@ class Editor extends Component {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
         });
         const document = (
-            <Document file={preview}>
+            <Document
+                id="doc"
+                file={preview}>
                 <Page pageNumber={1} width={700}>
-                <View/>
                 </Page>
             </Document>
         );
-        const download = (
-            didSubmit
-                ?
-                <Button color="primary"  to="/editor">Download</Button>
-                :
-                <Button color="primary" disabled={true}>Download</Button>
-        );
+
+        // ToDo загрузка не работает, разобраться с DownloadLink
         return (
             <div>
             <AppNavbar/>
@@ -92,14 +90,19 @@ class Editor extends Component {
                         {list}
                     </th>
                     <th width="50%">
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form>
                             <FormGroup>
-                                <Input type="textarea" value={input} onClick={event => cursor = event.target.selectionStart} onChange={this.handleTextArea} autoComplete="address-level1"/>
+                                <Input type="textarea"
+                                       value={input}
+                                       onClick={event => cursor = event.target.selectionStart}
+                                       onKeyDown={event => cursor = event.target.selectionStart}
+                                       onChange={this.handleTextArea}
+                                       autoComplete="address-level1"/>
                             </FormGroup>
                             <FormGroup>
-                                <Button color="success" type="submit">Compile</Button>{' '}
+                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
                                 <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
-                                {download}
+                                <Button color="primary" onClick={this.handleDownload(preview)} disabled={!didSubmit}  to="/editor">Download</Button>
                             </FormGroup>
                         </Form>
                     </th>
