@@ -15,8 +15,7 @@ class Editor extends Component {
             input: "",
             cursor: "",
             isLoading: true,
-            didSubmit: false,
-            preview: []};
+            didSubmit: false};
         this.handleTextArea = this.handleTextArea.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -46,7 +45,9 @@ class Editor extends Component {
         })
             .then(response => response.arrayBuffer())
             .then(data => {
-                this.setState({ preview: new Blob([data], {type: 'application/pdf'}), didSubmit: true});
+                this.setState({
+                    data: data,
+                    didSubmit: true});
             });
         this.props.history.push('/editor');
     }
@@ -58,22 +59,27 @@ class Editor extends Component {
                 if(cursor === undefined) {
                     this.setState({
                         input: input + data,
-                        data: data,
                         cursor: input.length + data.length});
                 } else {
                     this.setState({
                         input: input.slice(0, cursor) + data + input.slice(cursor, input.length),
-                        data: data,
                         cursor: cursor + data.length});
                 }
             });
         this.props.history.push('/editor');
     }
 
-    async handleDownload(preview) {
+    async handleDownload(data) {
         let binaryData = [];
-        binaryData.push(this.state.data)
-        window.URL.createObjectURL(new Blob(binaryData, {type: 'application/pdf'}));
+        binaryData.push(data);
+        const pdf = new Blob(binaryData, {type: 'application/pdf'});
+        const blobUrl = URL.createObjectURL(pdf);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = 'scheme.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     handleCursorMovement(event) {
@@ -81,20 +87,11 @@ class Editor extends Component {
     }
 
     render() {
-        const {input, elements, didSubmit, cursor, isLoading, preview} = this.state;
+        const {input, elements, didSubmit, cursor, isLoading, data} = this.state;
         if (isLoading) return <p>Loading...</p>;
             const list = elements.map(element => {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
         });
-        const document = (
-            <Document
-                id="doc"
-                file={preview}>
-                <Page pageNumber={1} object-fit="fill">
-                </Page>
-            </Document>
-        );
-        // ToDo загрузка не работает, разобраться с DownloadLink
         return (
             <div>
             <AppNavbar/>
@@ -116,12 +113,15 @@ class Editor extends Component {
                             <FormGroup>
                                 <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
                                 <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
-                                <Button color="primary" onClick={this.handleDownload(preview)} disabled={!didSubmit}  to="/editor">Download</Button>
+                                <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
                             </FormGroup>
                         </Form>
                     </th>
                     <th width="45%">
-                        {document}
+                        <Document
+                            file={data}>
+                            <Page pageNumber={1} object-fit="fill"/>
+                        </Document>
                     </th>
                 </tr>
             </Table>
