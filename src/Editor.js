@@ -90,7 +90,7 @@ class Editor extends Component {
             <Document
                 id="doc"
                 file={preview}>
-                <Page pageNumber={1} width={700}>
+                <Page pageNumber={1} object-fit="fill">
                 </Page>
             </Document>
         );
@@ -98,7 +98,7 @@ class Editor extends Component {
         return (
             <div>
             <AppNavbar/>
-            <Table>
+            <Table className="mt-4">
                 <tr>
                     <th width="5%">
                         {list}
