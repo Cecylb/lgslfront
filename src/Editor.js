@@ -11,7 +11,9 @@ class Editor extends Component {
         super(props);
         this.state = {
             elements: [],
+            data: [],
             input: "",
+            cursor: "",
             isLoading: true,
             didSubmit: false,
             preview: []};
@@ -53,20 +55,33 @@ class Editor extends Component {
         await fetch(`/api/editor/${element}`)
             .then(response => response.text())
             .then(data => {
-                this.setState({input: input.slice(0, cursor) + data + input.slice(cursor, input.length)});
+                if(cursor === undefined) {
+                    this.setState({
+                        input: input + data,
+                        data: data,
+                        cursor: input.length + data.length});
+                } else {
+                    this.setState({
+                        input: input.slice(0, cursor) + data + input.slice(cursor, input.length),
+                        data: data,
+                        cursor: cursor + data.length});
+                }
             });
         this.props.history.push('/editor');
     }
 
     async handleDownload(preview) {
         let binaryData = [];
-        binaryData.push(preview);
-        window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}));
+        binaryData.push(this.state.data)
+        window.URL.createObjectURL(new Blob(binaryData, {type: 'application/pdf'}));
+    }
+
+    handleCursorMovement(event) {
+        this.setState({cursor: event.target.selectionStart});
     }
 
     render() {
-        const {input, elements, didSubmit, isLoading, preview} = this.state;
-        let cursor;
+        const {input, elements, didSubmit, cursor, isLoading, preview} = this.state;
         if (isLoading) return <p>Loading...</p>;
             const list = elements.map(element => {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
@@ -79,7 +94,6 @@ class Editor extends Component {
                 </Page>
             </Document>
         );
-
         // ToDo загрузка не работает, разобраться с DownloadLink
         return (
             <div>
@@ -94,8 +108,8 @@ class Editor extends Component {
                             <FormGroup>
                                 <Input type="textarea"
                                        value={input}
-                                       onClick={event => cursor = event.target.selectionStart}
-                                       onKeyDown={event => cursor = event.target.selectionStart}
+                                       onClick={event => this.handleCursorMovement(event)}
+                                       onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
                                        autoComplete="address-level1"/>
                             </FormGroup>
