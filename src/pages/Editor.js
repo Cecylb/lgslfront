@@ -1,7 +1,7 @@
 import React, { Component, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from '../AppNavbar';
+import AppNavbar from '../navigation/AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import loading from './loading.gif'
 
