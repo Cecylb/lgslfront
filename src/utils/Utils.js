@@ -1,11 +1,9 @@
 class Utils {
 
     static async fetchElements() {
-        let elements;
-        await fetch('api/editor')
+        return await fetch('api/editor')
             .then(response => response.json())
-            .then(data => elements = data);
-        return elements;
+            .then(data => {return data});
     }
 }
 
