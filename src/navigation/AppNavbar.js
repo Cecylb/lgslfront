@@ -8,7 +8,9 @@ import './AppNavbar.css';
 export default class AppNavbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {isOpen: false};
+        this.state = {
+            isOpen: false,
+        };
         this.toggle = this.toggle.bind(this);
     }
 
@@ -27,16 +29,16 @@ export default class AppNavbar extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                 <Container fluid>
-                    <Button color="info" outline="danger" className="editor"><Link to="/editor" style={{color: 'yellowgreen'}}>Create new scheme</Link></Button>
-                    <Button color="info" outline="danger" className="options"><Link to="/options" style={{color: 'yellowgreen'}}>Options</Link></Button>
-                    <Button color="info" outline="danger" className="about"><Link to="/about" style={{color: 'yellowgreen'}}>About</Link></Button>
+                    <Link to="/editor"><Button color="light" outline="danger" className="editor">Create new scheme</Button></Link>
+                    <Link to="/options"> <Button color="light" outline="danger" className="options">Options</Button></Link>
+                    <Link to="/about"><Button color="light" outline="danger" className="about">About</Button></Link>
                 </Container>
                     <NavItem>
                         <NavLink
-                            href="https://twitter.com/cecylbcoceTb" style={{color: 'yellowgreen'}}>@cecylb</NavLink>
+                            href="https://twitter.com/cecylbcoceTb" style={{color: 'deepSkyBlue'}}>Twitter</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href="https://github.com/Cecylb" style={{color: 'yellowgreen'}}>GitHub</NavLink>
+                        <NavLink href="https://github.com/Cecylb" style={{color: 'gold'}}>GitHub</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>

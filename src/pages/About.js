@@ -4,6 +4,7 @@ import AppNavbar from '../navigation/AppNavbar';
 import { Link } from 'react-router-dom';
 import {Button, Collapse, Container, Nav, NavItem, NavLink} from 'reactstrap';
 import loading from "./loading.gif";
+import Utils from "../utils/Utils";
 
 class About extends Component {
 
@@ -14,16 +15,20 @@ class About extends Component {
             isLoading: true};
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({isLoading: true});
-        fetch('api/editor')
-            .then(response => response.json())
+        await Utils.fetchElements()
             .then(data => this.setState({elements: data, isLoading: false}));
     }
 
     render() {
         const {elements, isLoading} = this.state;
-        if (isLoading) return <img src ={loading} alt="Loading..."/>;
+        if (isLoading) return (
+            <div>
+                <AppNavbar/>
+                <img src ={loading} alt="Loading..."/>
+            </div>
+        );
         const list = elements.map(element => {
             return `${element} `;
         });
