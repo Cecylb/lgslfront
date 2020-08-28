@@ -1,9 +1,9 @@
 import React, { Component, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import {PDFDownloadLink, View} from "@react-pdf/renderer";
+import loading from './loading.gif'
 
 class Editor extends Component {
 
@@ -87,15 +87,22 @@ class Editor extends Component {
     }
 
     render() {
+        //ToDo поверх пдф превью рендерится текст. Этот текст растягивает страницу
         const {input, elements, didSubmit, cursor, isLoading, data} = this.state;
-        if (isLoading) return <p>Loading...</p>;
+        if (isLoading) return <img src ={loading} alt="Loading..."/>;
             const list = elements.map(element => {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
         });
+        const document = (data.length !== 0
+            ? <Document
+                file={data}>
+                <Page pageNumber={1} object-fit="fill"/>
+            </Document>
+            : "");
         return (
             <div>
             <AppNavbar/>
-            <Table className="mt-4">
+            <Table className="fixed">
                 <tr>
                     <th width="5%">
                         {list}
@@ -105,6 +112,7 @@ class Editor extends Component {
                             <FormGroup>
                                 <Input type="textarea"
                                        value={input}
+                                       rows={30}
                                        onClick={event => this.handleCursorMovement(event)}
                                        onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
@@ -118,10 +126,7 @@ class Editor extends Component {
                         </Form>
                     </th>
                     <th width="45%">
-                        <Document
-                            file={data}>
-                            <Page pageNumber={1} object-fit="fill"/>
-                        </Document>
+                        {document}
                     </th>
                 </tr>
             </Table>

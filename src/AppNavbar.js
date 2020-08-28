@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import logo from './logo.png'
 
 export default class AppNavbar extends Component {
     constructor(props) {
@@ -16,8 +17,10 @@ export default class AppNavbar extends Component {
     }
 
     render() {
-        return <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
+        return <Navbar color="info" light expand="md">
+            <NavbarBrand tag={Link} to="/">
+                <img src={logo} width="15%" alt="Home"/>
+            </NavbarBrand>
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
