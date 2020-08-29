@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import logo from '../logo.png'
+import logo from '../images/logo.png'
 import { Button, Container } from 'reactstrap';
 import './AppNavbar.css';
+import config from "../appconfig.json";
 
 export default class AppNavbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isOpen: false,
+            isOpen: false
         };
         this.toggle = this.toggle.bind(this);
     }
@@ -21,7 +22,7 @@ export default class AppNavbar extends Component {
     }
 
     render() {
-        return <Navbar color="secondary" light expand="md">
+        return <Navbar color={config.style.bar_color} light expand="md">
             <NavbarBrand tag={Link} to="/">
                 <img src={logo} width="15%" alt="Home"/>
             </NavbarBrand>
@@ -35,10 +36,10 @@ export default class AppNavbar extends Component {
                 </Container>
                     <NavItem>
                         <NavLink
-                            href="https://twitter.com/cecylbcoceTb" style={{color: 'deepSkyBlue'}}>Twitter</NavLink>
+                            href={config.links.twitter} style={{color: 'deepSkyBlue'}}>Twitter</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href="https://github.com/Cecylb" style={{color: 'gold'}}>GitHub</NavLink>
+                        <NavLink href={config.links.github} style={{color: 'gold'}}>GitHub</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>
