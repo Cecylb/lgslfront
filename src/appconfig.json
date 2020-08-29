@@ -5,6 +5,15 @@
     "vk" : "https://vk.com/cecylb"
   },
   "style": {
-    "bar_color" : "secondary"
+    "bar_color" : "secondary",
+    "isDark" : false,
+    "dark_theme" : {
+      "background" : "darkslategray",
+      "text" : "floralwhite"
+    },
+    "light_theme" : {
+      "background" : "white",
+      "text" : "black"
+    }
   }
 }

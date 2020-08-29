@@ -3,8 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from '../navigation/AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import loading from '../images/loading.gif'
+import loading from '../images/loading.gif';
 import Utils from "../utils/Utils";
+import config from "../appconfig.json";
 
 class Editor extends Component {
 
@@ -105,6 +106,8 @@ class Editor extends Component {
                 <Page pageNumber={1} wrap={false} object-fit="fill"/>
             </Document>
             : "");
+        const background = config.style.isDark ? config.style.dark_theme.background : config.style.light_theme.background;
+        const textColor = config.style.isDark ? config.style.dark_theme.text : config.style.light_theme.text;
         return (
             <div>
             <AppNavbar/>
@@ -119,6 +122,7 @@ class Editor extends Component {
                                 <Input type="textarea"
                                        value={input}
                                        rows={30}
+                                       style={{background: background, color: textColor}}
                                        onClick={event => this.handleCursorMovement(event)}
                                        onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
