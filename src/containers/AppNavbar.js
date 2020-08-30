@@ -3,7 +3,7 @@ import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } f
 import { Link } from 'react-router-dom';
 import logo from '../images/logo.png'
 import { Button, Container } from 'reactstrap';
-import './AppNavbar.css';
+import '../styles/AppNavbar.css';
 import config from "../appconfig.json";
 
 export default class AppNavbar extends Component {
@@ -22,7 +22,7 @@ export default class AppNavbar extends Component {
     }
 
     render() {
-        return <Navbar color={config.style.bar_color} light expand="md">
+        return <Navbar color='secondary' light expand="md">
             <NavbarBrand tag={Link} to="/">
                 <img src={logo} width="15%" alt="Home"/>
             </NavbarBrand>

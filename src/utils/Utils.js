@@ -1,10 +1,11 @@
-class Utils {
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "reactstrap";
+import React from "react";
 
-    static async fetchElements() {
-        return await fetch('api/editor')
-            .then(response => response.json())
-            .then(data => {return data});
-    }
-}
-
-export default Utils;
+export async function fetchElements() {
+     return await fetch('api/editor')
+         .then(response => response.json())
+         .then(data => {
+             return data
+         });
+ }

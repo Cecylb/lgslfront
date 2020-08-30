@@ -38,6 +38,26 @@
   text-decoration: none;
 }
 
+body {
+  background-color: darkslategrey;
+  color: floralwhite;
+}
+
+.textarea-dark {
+  background: darkslategrey;
+  color: floralwhite;
+}
+
+.body-light {
+  background-color: white;
+  color: black;
+}
+
+.textarea-light {
+  background: white;
+  color: black;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

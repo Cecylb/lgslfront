@@ -1,17 +1,18 @@
 import React, { Component, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from '../navigation/AppNavbar';
+import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import loading from '../images/loading.gif';
-import Utils from "../utils/Utils";
-import config from "../appconfig.json";
+import {fetchElements} from "../utils/Utils";
+import {connect} from "react-redux";
 
 class Editor extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            theme: props.theme,
             elements: [],
             data: [],
             input: "",
@@ -24,8 +25,7 @@ class Editor extends Component {
 
     async componentDidMount() {
         this.setState({isLoading: true});
-        const data = await Utils.fetchElements();
-        console.log("data1", data);
+        const data = await fetchElements();
         this.setState({elements: data, isLoading: false});
     }
 
@@ -90,24 +90,26 @@ class Editor extends Component {
 
     render() {
         //ToDo поверх пдф превью рендерится текст. Этот текст растягивает страницу
-        const {input, elements, didSubmit, cursor, isLoading, data} = this.state;
+        const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
         if (isLoading) return (
             <div>
             <AppNavbar/>
             <img src ={loading} alt="Loading..."/>
         </div>
         );
-            const list = elements.map(element => {
+        const textareaStyle = theme
+            ? 'textarea-dark'
+            : 'textarea-light';
+        console.log("theme", theme);
+        const list = elements.map(element => {
             return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
         });
-        const document = (data.length !== 0
+        const pdf = (data.length !== 0
             ? <Document
                 file={data}>
                 <Page pageNumber={1} wrap={false} object-fit="fill"/>
             </Document>
-            : "");
-        const background = config.style.isDark ? config.style.dark_theme.background : config.style.light_theme.background;
-        const textColor = config.style.isDark ? config.style.dark_theme.text : config.style.light_theme.text;
+            : null);
         return (
             <div>
             <AppNavbar/>
@@ -119,10 +121,10 @@ class Editor extends Component {
                     <th width="50%">
                         <Form>
                             <FormGroup>
-                                <Input type="textarea"
+                                <textarea
                                        value={input}
                                        rows={30}
-                                       style={{background: background, color: textColor}}
+                                       style={{background: document.body.style.backgroundColor, color: document.body.style.color}}
                                        onClick={event => this.handleCursorMovement(event)}
                                        onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
@@ -136,7 +138,7 @@ class Editor extends Component {
                         </Form>
                     </th>
                     <th width="45%">
-                        {document}
+                        {pdf}
                     </th>
                 </tr>
             </Table>
@@ -145,4 +147,10 @@ class Editor extends Component {
     }
 }
 
-export default withRouter(Editor);
+function mapStateToProps(state) {
+    return {
+        theme: state.themeDark
+    };
+}
+
+export default connect(mapStateToProps)(withRouter(Editor));

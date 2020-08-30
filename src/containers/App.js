@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../styles/App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './pages/Home';
-import Editor from './pages/Editor'
-import Options from "./pages/Options";
-import About from "./pages/About";
+import Home from './Home';
+import Editor from './Editor'
+import Options from "./Options";
+import About from "./About";
 
 class App extends Component {
+
   render() {
     return (
         <Router>
