@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
 import AppNavbar from './AppNavbar';
-import {Link, withRouter} from 'react-router-dom';
-import {Button, Collapse, Container, Nav, NavItem, NavLink} from 'reactstrap';
-import loading from "../images/loading.gif";
+import {withRouter} from 'react-router-dom';
+import {Container} from 'reactstrap';
 import {fetchElements} from "../utils/Utils";
 import config from "../appconfig.json";
 import {connect} from "react-redux";
@@ -29,7 +28,7 @@ class About extends Component {
         if (isLoading) return (
             <div>
                 <AppNavbar/>
-                <img src ={loading} alt="Loading..."/>
+                <div className={theme + '-lds-dual-ring'}/>
             </div>
         );
         const list = elements.map(element => {

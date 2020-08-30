@@ -1,9 +1,8 @@
-import React, { Component, useRef } from 'react';
+import React, { Component} from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import loading from '../images/loading.gif';
 import {fetchElements} from "../utils/Utils";
 import {connect} from "react-redux";
 
@@ -95,7 +94,7 @@ class Editor extends Component {
         if (isLoading) return (
             <div>
             <AppNavbar/>
-            <img src ={loading} alt="Loading..."/>
+            <div className={theme + '-lds-dual-ring'}/>
         </div>
         );
         const list = elements.map(element => {

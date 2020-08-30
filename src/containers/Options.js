@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
 import AppNavbar from './AppNavbar';
-import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Table} from 'reactstrap';
-import config from "../appconfig.json";
+import {withRouter} from 'react-router-dom';
+import {Container} from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {darkTheme} from "../actions";
@@ -26,7 +25,6 @@ class Options extends Component {
 
     render() {
         const {theme} = this.state;
-        //ToDo кнопки меняют цвет не сразу
         return (
             <div>
                 <AppNavbar/>
