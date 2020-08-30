@@ -10,40 +10,47 @@ import {darkTheme} from "../actions";
 
 class Options extends Component {
 
-    setTheme(isDark) {
-        if (isDark) {
-            document.body.style =
-                `background-color: darkslategrey; color: floralwhite;`;
-            this.props.darkTheme(true)
-        } else {
-            document.body.style =
-                `background-color: white; color: black;`;
-            this.props.darkTheme(false)
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: props.theme ? 'dark' : 'light'
         }
     }
 
+    setTheme(isDark) {
+        document.body.style = isDark
+            ? 'background-color: darkslategrey; color: floralwhite;'
+            : 'background-color: white; color: black;';
+        this.props.darkTheme(isDark)
+    }
+
     render() {
+        const {theme} = this.state;
+        //ToDo кнопки меняют цвет не сразу
         return (
             <div>
                 <AppNavbar/>
                 <Container fluid>
-                        <div className="btn-group-vertical">
-                            <h1> Theme:
-                                <button onClick={() => this.setTheme(true)}>dark</button>
-                                <button onClick={() => this.setTheme(false)}>light</button>
+                        <div>
+                            <h1 className="button-group"> Theme:
+                                <button className="dark-button" onClick={() => this.setTheme(true)}>dark</button>
+                                <button className="light-button" onClick={() => this.setTheme(false)}>light</button>
                             </h1>
                         </div>
-                    <div className="mb-auto">
-                        <Button color="link"><Link to="/">Back</Link></Button>
-                    </div>
                 </Container>
             </div>
         );
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        theme: state.themeDark
+    };
+}
+
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({darkTheme : darkTheme}, dispatch)
 }
 
-export default connect(null, matchDispatchToProps)(withRouter(Options));
+export default connect(mapStateToProps, matchDispatchToProps)(withRouter(Options));

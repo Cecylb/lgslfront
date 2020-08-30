@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {Button, Collapse, Container, Nav, NavItem, NavLink} from 'reactstrap';
 import loading from "../images/loading.gif";
 import {fetchElements} from "../utils/Utils";
 import config from "../appconfig.json";
+import {connect} from "react-redux";
 
 class About extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            theme: props.theme ? 'dark' : 'light',
             elements: [],
             isLoading: true};
     }
@@ -23,7 +25,7 @@ class About extends Component {
     }
 
     render() {
-        const {elements, isLoading} = this.state;
+        const {theme, elements, isLoading} = this.state;
         if (isLoading) return (
             <div>
                 <AppNavbar/>
@@ -41,11 +43,17 @@ class About extends Component {
                     <p>Simple language for creating complicated schemes with logic gates</p>
                     <p>Author: <a href={config.links.vk}>Valeriy Mochalov</a></p>
                     <p>Supported elements: {list}</p>
-                    <Button color="link"><Link to="/">Back</Link></Button>
                 </Container>
             </div>
         );
     }
 }
 
-export default About;
+
+function mapStateToProps(state) {
+    return {
+        theme: state.themeDark
+    };
+}
+
+export default connect(mapStateToProps)(withRouter(About));

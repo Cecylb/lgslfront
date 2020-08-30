@@ -1,6 +1,6 @@
 import React, { Component, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Form, FormGroup} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import loading from '../images/loading.gif';
@@ -12,7 +12,7 @@ class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            theme: props.theme,
+            theme: props.theme ? 'dark' : 'light',
             elements: [],
             data: [],
             input: "",
@@ -90,6 +90,7 @@ class Editor extends Component {
 
     render() {
         //ToDo поверх пдф превью рендерится текст. Этот текст растягивает страницу
+        //В идеале это решится при законченном бэкенде, когда пдф будет рендериться по правилам
         const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
         if (isLoading) return (
             <div>
@@ -97,12 +98,8 @@ class Editor extends Component {
             <img src ={loading} alt="Loading..."/>
         </div>
         );
-        const textareaStyle = theme
-            ? 'textarea-dark'
-            : 'textarea-light';
-        console.log("theme", theme);
         const list = elements.map(element => {
-            return <Button color="link" outline={false} onClick={() => this.handleElement(element, input, cursor)}>{element}</Button>
+            return <button className={theme + '-button-link'} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
         });
         const pdf = (data.length !== 0
             ? <Document
@@ -113,9 +110,9 @@ class Editor extends Component {
         return (
             <div>
             <AppNavbar/>
-            <Table className="fixed">
+            <table className="table">
                 <tr>
-                    <th width="5%">
+                    <th className="button-group" width="5%">
                         {list}
                     </th>
                     <th width="50%">
@@ -124,7 +121,7 @@ class Editor extends Component {
                                 <textarea
                                        value={input}
                                        rows={30}
-                                       style={{background: document.body.style.backgroundColor, color: document.body.style.color}}
+                                       className={theme + '-textarea'}
                                        onClick={event => this.handleCursorMovement(event)}
                                        onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
@@ -141,7 +138,7 @@ class Editor extends Component {
                         {pdf}
                     </th>
                 </tr>
-            </Table>
+            </table>
             </div>
         )
     }

@@ -38,6 +38,86 @@
   text-decoration: none;
 }
 
+.table {
+  border: none;
+  vertical-align: top;
+  table-layout: fixed;
+}
+
+.button-group button {
+  display: block;
+  cursor: pointer;
+  outline: none;
+}
+
+.button-group button:focus {
+  outline: none;
+}
+
+.button-group:focus{
+  outline: none;
+}
+
+.light-button {
+  display: block;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 8px;
+  width: 30%;
+}
+
+.light-button:hover {
+  background-color: lightgrey;
+}
+
+.light-button-link {
+  background-color: transparent;
+  color: blue;
+  border: none;
+  border-radius: 8px;
+  width: 20%;
+}
+
+.light-textarea {
+  background: white;
+  color: black;
+  width: 80%;
+  border-radius: 8px;
+  border: 2px solid black;
+}
+
+.dark-button {
+  display: block;
+  background-color: darkslategrey;
+  color: floralwhite;
+  border: 2px solid floralwhite;
+  border-radius: 8px;
+  width: 30%;
+  opacity: 0.8;
+}
+
+.dark-button:hover {
+  opacity: 1;
+}
+
+.dark-button-link {
+  background-color: transparent;
+  color: deepskyblue;
+  border: none;
+  width: 20%;
+  opacity: 0.8;
+}
+
+.dark-textarea {
+  background: darkslategrey;
+  color: floralwhite;
+  width: 80%;
+  border-radius: 8px;
+  border: 2px solid floralwhite;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
