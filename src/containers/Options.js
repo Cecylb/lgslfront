@@ -10,13 +10,6 @@ import {darkTheme} from "../actions";
 
 class Options extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            theme: props.theme
-        }
-    }
-
     setTheme(isDark) {
         if (isDark) {
             document.body.style =
@@ -53,10 +46,4 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({darkTheme : darkTheme}, dispatch)
 }
 
-function mapStateToProps(state) {
-    return {
-        theme: state.themeDark
-    };
-}
-
-export default connect(mapStateToProps, matchDispatchToProps)(withRouter(Options));
+export default connect(null, matchDispatchToProps)(withRouter(Options));
