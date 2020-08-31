@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../styles/App.css';
 import AppNavbar from './AppNavbar';
 import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
@@ -17,22 +16,20 @@ class Options extends Component {
     }
 
     setTheme(isDark) {
-        document.body.style = isDark
-            ? 'background-color: darkslategrey; color: floralwhite;'
-            : 'background-color: white; color: black;';
         this.props.darkTheme(isDark)
+        this.setState({theme: isDark ? 'dark' : 'light'});
     }
 
     render() {
         const {theme} = this.state;
         return (
-            <div>
+            <div className={`background ${theme}`}>
                 <AppNavbar/>
                 <Container fluid>
                         <div>
-                            <h1 className="button-group"> Theme:
-                                <button className="dark-button" onClick={() => this.setTheme(true)}>dark</button>
-                                <button className="light-button" onClick={() => this.setTheme(false)}>light</button>
+                            <h1 className="button-group-vertical"> Theme:
+                                <button className="button dark" onClick={() => this.setTheme(true)}>dark</button>
+                                <button className="button light" onClick={() => this.setTheme(false)}>light</button>
                             </h1>
                         </div>
                 </Container>

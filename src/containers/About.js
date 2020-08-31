@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../styles/App.css';
 import AppNavbar from './AppNavbar';
 import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
@@ -26,16 +25,16 @@ class About extends Component {
     render() {
         const {theme, elements, isLoading} = this.state;
         if (isLoading) return (
-            <div>
+            <div className={`background ${theme}`}>
                 <AppNavbar/>
-                <div className={theme + '-lds-dual-ring'}/>
+                <div className={`lds-dual-ring ${theme}`}/>
             </div>
         );
         const list = elements.map(element => {
             return `${element} `;
         });
         return (
-            <div>
+            <div className={`background ${theme}`}>
                 <AppNavbar/>
                 <Container fluid>
                     <h2>Logic Gate Schematic Language</h2>

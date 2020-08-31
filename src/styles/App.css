@@ -44,129 +44,15 @@
   table-layout: fixed;
 }
 
-.button-group button {
+.button-group-vertical button {
   display: block;
   cursor: pointer;
   outline: none;
 }
 
-.button-group button:focus {
+.button-group-vertical button:focus {
   outline: none;
 }
-
-.button-group:focus{
-  outline: none;
-}
-
-.light-lds-dual-ring {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-}
-.light-lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid black;
-  border-color: black transparent black transparent;
-  animation: light-lds-dual-ring 1.2s linear infinite;
-}
-@keyframes light-lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.light-button {
-  display: block;
-  background-color: white;
-  color: black;
-  border: 2px solid black;
-  border-radius: 8px;
-  width: 30%;
-}
-
-.light-button:hover {
-  background-color: lightgrey;
-}
-
-.light-button-link {
-  background-color: transparent;
-  color: blue;
-  border: none;
-  border-radius: 8px;
-  width: 20%;
-}
-
-.light-textarea {
-  background: white;
-  color: black;
-  width: 80%;
-  border-radius: 8px;
-  border: 2px solid black;
-}
-
-.dark-lds-dual-ring {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-}
-.dark-lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid floralwhite;
-  border-color: floralwhite transparent floralwhite transparent;
-  animation: dark-lds-dual-ring 1.2s linear infinite;
-}
-@keyframes dark-lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.dark-button {
-  display: block;
-  background-color: darkslategrey;
-  color: floralwhite;
-  border: 2px solid floralwhite;
-  border-radius: 8px;
-  width: 30%;
-  opacity: 0.8;
-}
-
-.dark-button:hover {
-  opacity: 1;
-}
-
-.dark-button-link {
-  background-color: transparent;
-  color: deepskyblue;
-  border: none;
-  width: 20%;
-  opacity: 0.8;
-}
-
-.dark-textarea {
-  background: darkslategrey;
-  color: floralwhite;
-  width: 80%;
-  border-radius: 8px;
-  border: 2px solid floralwhite;
-}
-
 
 @keyframes App-logo-spin {
   from {

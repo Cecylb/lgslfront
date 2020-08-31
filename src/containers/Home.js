@@ -2,11 +2,22 @@ import React, { Component } from 'react';
 import '../styles/App.css';
 import AppNavbar from './AppNavbar';
 import {Container} from 'reactstrap';
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 class Home extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: props.theme ? 'dark' : 'light'
+        }
+    }
+
     render() {
+        const {theme} = this.state;
         return (
-            <div>
+            <div className={`background ${theme}`}>
                 <AppNavbar/>
                 <Container fluid>
                     <h3> Here will be the documentation of this project</h3>
@@ -17,4 +28,10 @@ class Home extends Component {
     }
 }
 
-export default Home;
+function mapStateToProps(state) {
+    return {
+        theme: state.themeDark
+    };
+}
+
+export default connect(mapStateToProps)(withRouter(Home));

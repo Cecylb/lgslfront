@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup} from 'reactstrap';
+import '../styles/DarkTheme.css';
+import '../styles/LightTheme.css';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import {fetchElements} from "../utils/Utils";
@@ -92,13 +94,13 @@ class Editor extends Component {
         //В идеале это решится при законченном бэкенде, когда пдф будет рендериться по правилам
         const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
         if (isLoading) return (
-            <div>
+            <div className={`background ${theme}`}>
             <AppNavbar/>
-            <div className={theme + '-lds-dual-ring'}/>
+            <div className={`lds-dual-ring ${theme}`}/>
         </div>
         );
         const list = elements.map(element => {
-            return <button className={theme + '-button-link'} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
+            return <button className={`button-link ${theme}`} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
         });
         const pdf = (data.length !== 0
             ? <Document
@@ -107,11 +109,11 @@ class Editor extends Component {
             </Document>
             : null);
         return (
-            <div>
+            <div className={`background ${theme}`}>
             <AppNavbar/>
             <table className="table">
                 <tr>
-                    <th className="button-group" width="5%">
+                    <th className="button-group-vertical" width="5%">
                         {list}
                     </th>
                     <th width="50%">
@@ -120,7 +122,7 @@ class Editor extends Component {
                                 <textarea
                                        value={input}
                                        rows={30}
-                                       className={theme + '-textarea'}
+                                       className={`textarea ${theme}`}
                                        onClick={event => this.handleCursorMovement(event)}
                                        onKeyUp={event => this.handleCursorMovement(event)}
                                        onChange={this.handleTextArea}
