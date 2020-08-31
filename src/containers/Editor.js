@@ -95,9 +95,9 @@ class Editor extends Component {
         const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
         if (isLoading) return (
             <div className={`background ${theme}`}>
-            <AppNavbar/>
-            <div className={`lds-dual-ring ${theme}`}/>
-        </div>
+                <AppNavbar/>
+                <div className={`lds-dual-ring ${theme}`}/>
+            </div>
         );
         const list = elements.map(element => {
             return <button className={`button-link ${theme}`} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
@@ -110,36 +110,36 @@ class Editor extends Component {
             : null);
         return (
             <div className={`background ${theme}`}>
-            <AppNavbar/>
-            <table className="table">
-                <tr>
-                    <th className="button-group-vertical" width="5%">
-                        {list}
-                    </th>
-                    <th width="50%">
-                        <Form>
-                            <FormGroup>
+                <AppNavbar/>
+                <table className="table">
+                    <tr>
+                        <th className="button-group-vertical" width="5%">
+                            {list}
+                        </th>
+                        <th width="50%">
+                            <Form>
+                                <FormGroup>
                                 <textarea
-                                       value={input}
-                                       rows={30}
-                                       className={`textarea ${theme}`}
-                                       onClick={event => this.handleCursorMovement(event)}
-                                       onKeyUp={event => this.handleCursorMovement(event)}
-                                       onChange={this.handleTextArea}
-                                       autoComplete="address-level1"/>
-                            </FormGroup>
-                            <FormGroup>
-                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
-                                <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
-                                <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
-                            </FormGroup>
-                        </Form>
-                    </th>
-                    <th width="45%">
-                        {pdf}
-                    </th>
-                </tr>
-            </table>
+                                    value={input}
+                                    rows={30}
+                                    className={`textarea ${theme}`}
+                                    onClick={event => this.handleCursorMovement(event)}
+                                    onKeyUp={event => this.handleCursorMovement(event)}
+                                    onChange={this.handleTextArea}
+                                    autoComplete="address-level1"/>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
+                                    <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
+                                    <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
+                                </FormGroup>
+                            </Form>
+                        </th>
+                        <th width="45%">
+                            {pdf}
+                        </th>
+                    </tr>
+                </table>
             </div>
         )
     }

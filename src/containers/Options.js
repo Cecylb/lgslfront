@@ -27,10 +27,10 @@ class Options extends Component {
                 <AppNavbar/>
                 <Container fluid>
                         <div>
-                            <h1 className="button-group-vertical"> Theme:
+                            <h3 className="button-group-vertical"> Theme:
                                 <button className="button dark" onClick={() => this.setTheme(true)}>dark</button>
                                 <button className="button light" onClick={() => this.setTheme(false)}>light</button>
-                            </h1>
+                            </h3>
                         </div>
                 </Container>
             </div>

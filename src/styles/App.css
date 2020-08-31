@@ -38,8 +38,54 @@
   text-decoration: none;
 }
 
-.table {
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.button {
+  border-radius: 8px;
+  width: 100px;
+}
+
+.button-link {
+  background-color: transparent;
   border: none;
+  width: 20%;
+  opacity: 0.8;
+}
+
+.background {
+  height: 100vh;
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.table {
+  border: transparent;
   vertical-align: top;
   table-layout: fixed;
 }
@@ -48,6 +94,7 @@
   display: block;
   cursor: pointer;
   outline: none;
+  position: relative;
 }
 
 .button-group-vertical button:focus {
