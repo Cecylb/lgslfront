@@ -5,8 +5,8 @@ import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import {fetchElements} from "../utils/Utils";
 import {connect} from "react-redux";
+import {fetchElements, loading} from "../utils/Utils";
 
 class Editor extends Component {
 
@@ -26,8 +26,8 @@ class Editor extends Component {
 
     async componentDidMount() {
         this.setState({isLoading: true});
-        const data = await fetchElements();
-        this.setState({elements: data, isLoading: false});
+        await fetchElements()
+            .then(data => this.setState({elements: data, isLoading: false}));
     }
 
     handleTextArea(event) {
@@ -90,35 +90,29 @@ class Editor extends Component {
     }
 
     render() {
-        //ToDo поверх пдф превью рендерится текст. Этот текст растягивает страницу
-        //В идеале это решится при законченном бэкенде, когда пдф будет рендериться по правилам
         const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
-        if (isLoading) return (
-            <div className={`background ${theme}`}>
-                <AppNavbar/>
-                <div className={`lds-dual-ring ${theme}`}/>
-            </div>
-        );
+        if(isLoading) return loading(theme);
         const list = elements.map(element => {
             return <button className={`button-link ${theme}`} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
         });
         const pdf = (data.length !== 0
             ? <Document
                 file={data}>
-                <Page pageNumber={1} wrap={false} object-fit="fill"/>
-            </Document>
+                <Page pageNumber={1} scale={0.8}/>
+              </Document>
             : null);
         return (
             <div className={`background ${theme}`}>
                 <AppNavbar/>
-                <table className="table">
-                    <tr>
-                        <th className="button-group-vertical" width="5%">
-                            {list}
-                        </th>
-                        <th width="50%">
-                            <Form>
-                                <FormGroup>
+                <div className="editor-form">
+                    <div className="tool-group">
+                        <div className="button-group-vertical">
+                        {list}
+                        </div>
+                    </div>
+                    <div className="editor-group">
+                        <Form>
+                            <FormGroup>
                                 <textarea
                                     value={input}
                                     rows={30}
@@ -127,19 +121,18 @@ class Editor extends Component {
                                     onKeyUp={event => this.handleCursorMovement(event)}
                                     onChange={this.handleTextArea}
                                     autoComplete="address-level1"/>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
-                                    <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
-                                    <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
-                                </FormGroup>
-                            </Form>
-                        </th>
-                        <th width="45%">
-                            {pdf}
-                        </th>
-                    </tr>
-                </table>
+                            </FormGroup>
+                            <FormGroup>
+                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
+                                <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
+                                <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
+                            </FormGroup>
+                        </Form>
+                    </div>
+                    <div className="pdf-group">
+                        {pdf}
+                    </div>
+                </div>
             </div>
         )
     }

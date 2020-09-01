@@ -80,7 +80,7 @@
 }
 
 .textarea {
-  width: 100%;
+  min-width: 100%;
   border-radius: 8px;
 }
 
@@ -99,6 +99,45 @@
 
 .button-group-vertical button:focus {
   outline: none;
+}
+
+.editor-form {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  height: 80%;
+}
+
+.tool-group {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  height: 100%;
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: row wrap;
+  margin-bottom: 0;
+  width: 10vh;
+}
+
+.editor-group {
+  position: relative;
+  top: 10px;
+  height: 100%;
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: row wrap;
+  align-items: center;
+  margin-bottom: 0;
+  width: 40%;
+}
+
+.pdf-group {
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: row wrap;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 @keyframes App-logo-spin {

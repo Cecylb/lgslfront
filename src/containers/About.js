@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
 import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
-import {fetchElements} from "../utils/Utils";
 import config from "../appconfig.json";
 import {connect} from "react-redux";
+import {fetchElements, loading} from "../utils/Utils";
 
 class About extends Component {
 
@@ -24,14 +24,9 @@ class About extends Component {
 
     render() {
         const {theme, elements, isLoading} = this.state;
-        if (isLoading) return (
-            <div className={`background ${theme}`}>
-                <AppNavbar/>
-                <div className={`lds-dual-ring ${theme}`}/>
-            </div>
-        );
+        if(isLoading) return loading(theme);
         const list = elements.map(element => {
-            return `${element} `;
+            return `${element} `
         });
         return (
             <div className={`background ${theme}`}>
@@ -46,7 +41,6 @@ class About extends Component {
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {

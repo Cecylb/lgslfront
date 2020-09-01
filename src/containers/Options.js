@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {darkTheme} from "../actions";
+import {darkTheme} from "../utils/actions";
 
 class Options extends Component {
 
