@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
 import config from "../appconfig.json";
 import {connect} from "react-redux";
-import {fetchElements, loading} from "../utils/Utils";
+import {fetchElements} from "../utils/actions";
 
 class About extends Component {
 
@@ -14,18 +14,13 @@ class About extends Component {
             theme: props.theme ? 'dark' : 'light',
             elements: [],
             isLoading: true};
-    }
-
-    async componentDidMount() {
-        this.setState({isLoading: true});
-        await fetchElements()
-            .then(data => this.setState({elements: data, isLoading: false}));
+        this.props.fetchElements();
     }
 
     render() {
         const {theme, elements, isLoading} = this.state;
-        if(isLoading) return loading(theme);
-        const list = elements.map(element => {
+        //if(isLoading) return loading(theme);
+        const list = this.props.elements.map(element => {
             return `${element} `
         });
         return (
@@ -44,8 +39,14 @@ class About extends Component {
 
 function mapStateToProps(state) {
     return {
-        theme: state.themeDark
+        theme: state.app.themeDark,
+        loading: state.app.loading,
+        elements: state.fetchReducer.elements
     };
 }
 
-export default connect(mapStateToProps)(withRouter(About));
+const mapDispatchToProps = {
+    fetchElements: fetchElements
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(About));

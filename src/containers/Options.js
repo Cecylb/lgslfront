@@ -40,7 +40,7 @@ class Options extends Component {
 
 function mapStateToProps(state) {
     return {
-        theme: state.themeDark
+        theme: state.app.themeDark
     };
 }
 

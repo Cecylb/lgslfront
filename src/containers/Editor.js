@@ -6,12 +6,14 @@ import '../styles/LightTheme.css';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import {connect} from "react-redux";
-import {fetchElements, loading} from "../utils/Utils";
+import {loading} from "../utils/loading";
+import {fetchElements, fetchTemplate} from "../utils/actions";
 
 class Editor extends Component {
 
     constructor(props) {
         super(props);
+        const fetchElements = props.fetchElements();
         this.state = {
             theme: props.theme ? 'dark' : 'light',
             elements: [],
@@ -20,14 +22,9 @@ class Editor extends Component {
             cursor: "",
             isLoading: true,
             didSubmit: false};
+        this.props.fetchElements();
         this.handleTextArea = this.handleTextArea.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    async componentDidMount() {
-        this.setState({isLoading: true});
-        await fetchElements()
-            .then(data => this.setState({elements: data, isLoading: false}));
     }
 
     handleTextArea(event) {
@@ -56,6 +53,9 @@ class Editor extends Component {
     }
 
     async handleElement(element, input, cursor) {
+        //ToDo значения в стейт приходят к следующему обращению. Видимо мап стейта происходит до изменений
+        //this.props.fetchTemplate(element);
+        //const data = this.props.template;
         await fetch(`/api/editor/${element}`)
             .then(response => response.text())
             .then(data => {
@@ -90,9 +90,11 @@ class Editor extends Component {
     }
 
     render() {
-        const {theme, input, elements, didSubmit, cursor, isLoading, data} = this.state;
-        if(isLoading) return loading(theme);
-        const list = elements.map(element => {
+
+        const {theme, input, didSubmit, cursor, isLoading, data} = this.state;
+        //ToDo разобраться с отображением загрузки
+        //if(this.props.loading) return loading(theme);
+        const list = this.props.elements.map(element => {
             return <button className={`button-link ${theme}`} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
         });
         const pdf = (data.length !== 0
@@ -111,7 +113,7 @@ class Editor extends Component {
                         </div>
                     </div>
                     <div className="editor-group">
-                        <Form>
+                        <Form onSumbit={this.handleSubmit}>
                             <FormGroup>
                                 <textarea
                                     value={input}
@@ -123,7 +125,7 @@ class Editor extends Component {
                                     autoComplete="address-level1"/>
                             </FormGroup>
                             <FormGroup>
-                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
+                                <Button color="success" type="submit">Compile</Button>{' '}
                                 <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
                                 <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
                             </FormGroup>
@@ -140,8 +142,16 @@ class Editor extends Component {
 
 function mapStateToProps(state) {
     return {
-        theme: state.themeDark
+        theme: state.app.themeDark,
+        loading: state.app.loading,
+        elements: state.fetchReducer.elements,
+        template: state.fetchReducer.template
     };
 }
 
-export default connect(mapStateToProps)(withRouter(Editor));
+const mapDispatchToProps = {
+    fetchElements: fetchElements,
+    fetchTemplate: fetchTemplate
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Editor));

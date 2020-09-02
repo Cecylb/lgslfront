@@ -9,11 +9,3 @@ export const loading = (theme) => {
         </div>
     );
 }
-
-export async function fetchElements() {
-    return await fetch('api/editor')
-        .then(response => response.json())
-        .then(data => {
-            return data
-        });
-}
