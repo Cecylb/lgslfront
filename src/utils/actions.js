@@ -5,7 +5,8 @@ export const FETCH_ELEMENTS = 'FETCH_ELEMENTS'
 export const REQUEST_ELEMENTS = 'REQUEST_ELEMENTS'
 export const FETCH_TEMPLATE = 'FETCH_TEMPLATE'
 export const REQUEST_TEMPLATE = 'REQUEST_TEMPLATE'
-export const SUBMIT_INPUT = 'SUBMIT_INPUT'
+export const REQUEST_PDF = 'REQUEST_PDF'
+export const FETCH_PDF = 'FETCH_PDF'
 
 export function darkTheme(boolean) {
     return {
@@ -36,5 +37,12 @@ export function fetchTemplate(element) {
     return {
         type: REQUEST_TEMPLATE,
         element: element
+    }
+}
+
+export function  fetchPdf(input) {
+    return {
+        type: REQUEST_PDF,
+        input: input
     }
 }

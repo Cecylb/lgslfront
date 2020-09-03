@@ -5,6 +5,7 @@ import {Container} from 'reactstrap';
 import config from "../appconfig.json";
 import {connect} from "react-redux";
 import {fetchElements} from "../utils/actions";
+import {loading} from "../utils/loading";
 
 class About extends Component {
 
@@ -12,14 +13,14 @@ class About extends Component {
         super(props);
         this.state = {
             theme: props.theme ? 'dark' : 'light',
-            elements: [],
-            isLoading: true};
+            elements: []
+        };
         this.props.fetchElements();
     }
 
     render() {
         const {theme, elements, isLoading} = this.state;
-        //if(isLoading) return loading(theme);
+        if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
             return `${element} `
         });
@@ -37,7 +38,7 @@ class About extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapState(state) {
     return {
         theme: state.app.themeDark,
         loading: state.app.loading,
@@ -45,8 +46,8 @@ function mapStateToProps(state) {
     };
 }
 
-const mapDispatchToProps = {
+const actions = {
     fetchElements: fetchElements
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(About));
+export default connect(mapState, actions)(withRouter(About));

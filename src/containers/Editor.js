@@ -7,24 +7,33 @@ import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import {connect} from "react-redux";
 import {loading} from "../utils/loading";
-import {fetchElements, fetchTemplate} from "../utils/actions";
+import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
 
 class Editor extends Component {
 
     constructor(props) {
         super(props);
-        const fetchElements = props.fetchElements();
         this.state = {
             theme: props.theme ? 'dark' : 'light',
             elements: [],
             data: [],
             input: "",
             cursor: "",
-            isLoading: true,
+            panel: false,
             didSubmit: false};
         this.props.fetchElements();
         this.handleTextArea = this.handleTextArea.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.pdf !== prevProps.pdf) {
+            this.setState({data: this.props.pdf});
+        }
+        if(this.props.template !== prevProps.template) {
+            this.setState({panel: true});
+        }
+
     }
 
     handleTextArea(event) {
@@ -33,43 +42,28 @@ class Editor extends Component {
         });
     }
 
-    async handleSubmit(event) {
+    handleElement(element) {
+        this.props.fetchTemplate(element);
+        }
+
+    handleSubmit(event) {
         event.preventDefault();
-        await fetch('/api/editor/submit', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.input),
-        })
-            .then(response => response.arrayBuffer())
-            .then(data => {
-                this.setState({
-                    data: data,
-                    didSubmit: true});
-            });
-        this.props.history.push('/editor');
+        this.props.fetchPdf(this.state.input);
+        this.setState({didSubmit: true});
     }
 
-    async handleElement(element, input, cursor) {
-        //ToDo значения в стейт приходят к следующему обращению. Видимо мап стейта происходит до изменений
-        //this.props.fetchTemplate(element);
-        //const data = this.props.template;
-        await fetch(`/api/editor/${element}`)
-            .then(response => response.text())
-            .then(data => {
-                if(cursor === undefined) {
-                    this.setState({
-                        input: input + data,
-                        cursor: input.length + data.length});
-                } else {
-                    this.setState({
-                        input: input.slice(0, cursor) + data + input.slice(cursor, input.length),
-                        cursor: cursor + data.length});
-                }
-            });
-        this.props.history.push('/editor');
+    setTemplate(cursor, input) {
+        const template = this.props.template;
+        if(cursor === undefined) {
+            this.setState({
+                input: input + template,
+                cursor: input.length + template.length});
+        } else {
+            this.setState({
+                input: input.slice(0, cursor) + template + input.slice(cursor, input.length),
+                cursor: cursor + template.length});
+        }
+        this.setState({panel: false});
     }
 
     async handleDownload(data) {
@@ -90,13 +84,13 @@ class Editor extends Component {
     }
 
     render() {
-
-        const {theme, input, didSubmit, cursor, isLoading, data} = this.state;
-        //ToDo разобраться с отображением загрузки
-        //if(this.props.loading) return loading(theme);
+        const {theme, input, didSubmit, template, cursor, isLoading, data} = this.state;
+        if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
-            return <button className={`button-link ${theme}`} onClick={() => this.handleElement(element, input, cursor)}>{element}</button>
+            return <button className={`button-link ${theme}`}
+                           onClick={() => this.handleElement(element)}>{element}</button>
         });
+        {this.state.panel && this.setTemplate(cursor, input)}
         const pdf = (data.length !== 0
             ? <Document
                 file={data}>
@@ -113,7 +107,7 @@ class Editor extends Component {
                         </div>
                     </div>
                     <div className="editor-group">
-                        <Form onSumbit={this.handleSubmit}>
+                        <Form>
                             <FormGroup>
                                 <textarea
                                     value={input}
@@ -125,7 +119,7 @@ class Editor extends Component {
                                     autoComplete="address-level1"/>
                             </FormGroup>
                             <FormGroup>
-                                <Button color="success" type="submit">Compile</Button>{' '}
+                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
                                 <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
                                 <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
                             </FormGroup>
@@ -140,18 +134,20 @@ class Editor extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapState(state) {
     return {
         theme: state.app.themeDark,
         loading: state.app.loading,
         elements: state.fetchReducer.elements,
-        template: state.fetchReducer.template
+        template: state.fetchReducer.template,
+        pdf: state.fetchReducer.pdf
     };
 }
 
-const mapDispatchToProps = {
+const actions = {
     fetchElements: fetchElements,
-    fetchTemplate: fetchTemplate
+    fetchTemplate: fetchTemplate,
+    fetchPdf: fetchPdf
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Editor));
+export default connect(mapState, actions)(withRouter(Editor));
