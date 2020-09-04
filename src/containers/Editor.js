@@ -6,15 +6,15 @@ import '../styles/LightTheme.css';
 import AppNavbar from './AppNavbar';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import {connect} from "react-redux";
-import {loading} from "../utils/loading";
+import {loading} from "../utils/templates/loading";
 import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
+import {preview} from "../utils/templates/preview";
 
 class Editor extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            theme: props.theme ? 'dark' : 'light',
             elements: [],
             data: [],
             input: "",
@@ -84,19 +84,15 @@ class Editor extends Component {
     }
 
     render() {
-        const {theme, input, didSubmit, template, cursor, isLoading, data} = this.state;
+        const {input, didSubmit, template, cursor, isLoading, data} = this.state;
+        const theme = this.props.theme ? 'dark' : 'light';
         if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
             return <button className={`button-link ${theme}`}
                            onClick={() => this.handleElement(element)}>{element}</button>
         });
         {this.state.panel && this.setTemplate(cursor, input)}
-        const pdf = (data.length !== 0
-            ? <Document
-                file={data}>
-                <Page pageNumber={1} scale={0.8}/>
-              </Document>
-            : null);
+        const pdf = preview(this.props.preview && data.length !== 0, data);
         return (
             <div className={`background ${theme}`}>
                 <AppNavbar/>
@@ -125,9 +121,7 @@ class Editor extends Component {
                             </FormGroup>
                         </Form>
                     </div>
-                    <div className="pdf-group">
-                        {pdf}
-                    </div>
+                    {pdf}
                 </div>
             </div>
         )
@@ -137,6 +131,7 @@ class Editor extends Component {
 function mapState(state) {
     return {
         theme: state.app.themeDark,
+        preview: state.app.preview,
         loading: state.app.loading,
         elements: state.fetchReducer.elements,
         template: state.fetchReducer.template,

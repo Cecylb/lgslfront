@@ -1,5 +1,5 @@
 import React from "react";
-import AppNavbar from "../containers/AppNavbar";
+import AppNavbar from "../../containers/AppNavbar";
 
 export const loading = (theme) => {
      return (

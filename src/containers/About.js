@@ -5,7 +5,7 @@ import {Container} from 'reactstrap';
 import config from "../appconfig.json";
 import {connect} from "react-redux";
 import {fetchElements} from "../utils/actions";
-import {loading} from "../utils/loading";
+import {loading} from "../utils/templates/loading";
 
 class About extends Component {
 
