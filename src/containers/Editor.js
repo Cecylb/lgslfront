@@ -84,8 +84,8 @@ class Editor extends Component {
     }
 
     render() {
-        const {input, didSubmit, template, cursor, isLoading, data} = this.state;
-        const theme = this.props.theme ? 'dark' : 'light';
+        const {input, didSubmit, template, cursor, data} = this.state;
+        const theme = this.props.theme;
         if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
             return <button className={`button-link ${theme}`}

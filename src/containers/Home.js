@@ -9,13 +9,10 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            theme: props.theme ? 'dark' : 'light'
-        }
     }
 
     render() {
-        const {theme} = this.state;
+        const theme = this.props.theme;
         return (
             <div className={`background ${theme}`}>
                 <AppNavbar/>
@@ -30,7 +27,7 @@ class Home extends Component {
 
 function mapStateToProps(state) {
     return {
-        theme: state.themeDark
+        theme: state.app.themeDark
     };
 }
 

@@ -11,15 +11,11 @@ class About extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            theme: props.theme ? 'dark' : 'light',
-            elements: []
-        };
         this.props.fetchElements();
     }
 
     render() {
-        const {theme, elements, isLoading} = this.state;
+        const theme = this.props.theme;
         if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
             return `${element} `

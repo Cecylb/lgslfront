@@ -11,7 +11,7 @@ class Options extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            theme: props.theme ? 'dark' : 'light'
+            theme: props.theme
         }
     }
 
