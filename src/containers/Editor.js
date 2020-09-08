@@ -4,11 +4,11 @@ import { Button, Form, FormGroup} from 'reactstrap';
 import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
 import AppNavbar from './AppNavbar';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import {connect} from "react-redux";
 import {loading} from "../utils/templates/loading";
 import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
 import {preview} from "../utils/templates/preview";
+import {Controlled as CodeMirror} from 'react-codemirror2'
 
 class Editor extends Component {
 
@@ -52,20 +52,6 @@ class Editor extends Component {
         this.setState({didSubmit: true});
     }
 
-    setTemplate(cursor, input) {
-        const template = this.props.template;
-        if(cursor === undefined) {
-            this.setState({
-                input: input + template,
-                cursor: input.length + template.length});
-        } else {
-            this.setState({
-                input: input.slice(0, cursor) + template + input.slice(cursor, input.length),
-                cursor: cursor + template.length});
-        }
-        this.setState({panel: false});
-    }
-
     async handleDownload(data) {
         let binaryData = [];
         binaryData.push(data);
@@ -83,16 +69,31 @@ class Editor extends Component {
         this.setState({cursor: event.target.selectionStart});
     }
 
+    setTemplate(cursor, input) {
+        const template = this.props.template;
+        if(cursor === undefined) {
+            this.setState({
+                input: input + template,
+                cursor: input.length + template.length});
+        } else {
+            this.setState({
+                input: input.slice(0, cursor) + template + input.slice(cursor, input.length),
+                cursor: cursor + template.length});
+        }
+        this.setState({panel: false});
+    }
+
     render() {
-        const {input, didSubmit, template, cursor, data} = this.state;
         const theme = this.props.theme;
         if(this.props.loading) return loading(theme);
+        const {input, didSubmit, cursor, data} = this.state;
         const list = this.props.elements.map(element => {
             return <button className={`button-link ${theme}`}
                            onClick={() => this.handleElement(element)}>{element}</button>
         });
         {this.state.panel && this.setTemplate(cursor, input)}
         const pdf = preview(this.props.preview && data.length !== 0, data);
+        //let editor = CodeMirror.fromTextArea(document.getElementById('editor'));
         return (
             <div className={`background ${theme}`}>
                 <AppNavbar/>
@@ -107,12 +108,13 @@ class Editor extends Component {
                             <FormGroup>
                                 <textarea
                                     value={input}
+                                    options={{mode: 'xml', lineNumbers: true}}
                                     rows={30}
+                                    id="editor"
                                     className={`textarea ${theme}`}
                                     onClick={event => this.handleCursorMovement(event)}
                                     onKeyUp={event => this.handleCursorMovement(event)}
-                                    onChange={this.handleTextArea}
-                                    autoComplete="address-level1"/>
+                                    onChange={this.handleTextArea}/>
                             </FormGroup>
                             <FormGroup>
                                 <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
