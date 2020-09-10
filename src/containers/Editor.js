@@ -84,7 +84,7 @@ class Editor extends Component {
     }
 
     render() {
-        const theme = this.props.theme;
+        const theme = localStorage.getItem('theme');
         if(this.props.loading) return loading(theme);
         const {input, didSubmit, cursor, data} = this.state;
         const list = this.props.elements.map(element => {
@@ -132,7 +132,6 @@ class Editor extends Component {
 
 function mapState(state) {
     return {
-        theme: state.app.themeDark,
         preview: state.app.preview,
         loading: state.app.loading,
         elements: state.fetchReducer.elements,

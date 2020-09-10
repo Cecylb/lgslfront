@@ -11,12 +11,12 @@ class Options extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            theme: props.theme
+            theme: localStorage.getItem('theme')
         }
     }
 
     setTheme(isDark) {
-        this.props.darkTheme(isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
         this.setState({theme: isDark ? 'dark' : 'light'});
     }
 
@@ -48,14 +48,8 @@ class Options extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        theme: state.app.themeDark
-    };
-}
-
 function matchDispatchToProps(dispatch) {
-    return bindActionCreators({darkTheme : darkTheme, managePreview: managePreview}, dispatch)
+    return bindActionCreators({managePreview: managePreview}, dispatch)
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(withRouter(Options));
+export default connect(null, matchDispatchToProps)(withRouter(Options));

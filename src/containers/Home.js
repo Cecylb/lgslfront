@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../styles/App.css';
 import AppNavbar from './AppNavbar';
 import {Container} from 'reactstrap';
-import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 
 class Home extends Component {
@@ -12,7 +11,7 @@ class Home extends Component {
     }
 
     render() {
-        const theme = this.props.theme;
+        const theme = localStorage.getItem('theme');
         return (
             <div className={`background ${theme}`}>
                 <AppNavbar/>
@@ -25,10 +24,4 @@ class Home extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        theme: state.app.themeDark
-    };
-}
-
-export default connect(mapStateToProps)(withRouter(Home));
+export default withRouter(Home);

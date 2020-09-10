@@ -1,7 +1,6 @@
 import {HIDE_LOADER, PREVIEW_MANAGED, SHOW_LOADER, THEME_SELECTED} from "../actions";
 
 const initialState = {
-    themeDark: 'light',
     loading: false,
     preview: true
 }
@@ -12,8 +11,6 @@ export const appReducer = (state = initialState, action) => {
             return {...state, loading: true}
         case HIDE_LOADER:
             return {...state, loading: false}
-        case THEME_SELECTED:
-            return {...state, themeDark: action.payload ? 'dark' : 'light'}
         case PREVIEW_MANAGED:
             return {...state, preview: action.payload}
         default: return state

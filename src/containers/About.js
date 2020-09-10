@@ -15,7 +15,7 @@ class About extends Component {
     }
 
     render() {
-        const theme = this.props.theme;
+        const theme = localStorage.getItem('theme');
         if(this.props.loading) return loading(theme);
         const list = this.props.elements.map(element => {
             return `${element} `
@@ -36,7 +36,6 @@ class About extends Component {
 
 function mapState(state) {
     return {
-        theme: state.app.themeDark,
         loading: state.app.loading,
         elements: state.fetchReducer.elements
     };
