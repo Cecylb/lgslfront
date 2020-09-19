@@ -3,12 +3,11 @@ import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup} from 'reactstrap';
 import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
-import AppNavbar from './AppNavbar';
 import {connect} from "react-redux";
-import {loading} from "../utils/templates/loading";
 import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
-import {preview} from "../utils/templates/preview";
 import {Controlled as CodeMirror} from 'react-codemirror2'
+import {loading} from "./props/loading";
+import {preview} from "./editor/preview";
 
 class Editor extends Component {
 
@@ -24,6 +23,7 @@ class Editor extends Component {
         this.props.fetchElements();
         this.handleTextArea = this.handleTextArea.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCursorMovement = this.handleCursorMovement.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,7 +33,6 @@ class Editor extends Component {
         if(this.props.template !== prevProps.template) {
             this.setState({panel: true});
         }
-
     }
 
     handleTextArea(event) {
@@ -44,7 +43,7 @@ class Editor extends Component {
 
     handleElement(element) {
         this.props.fetchTemplate(element);
-        }
+    }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -96,11 +95,10 @@ class Editor extends Component {
         //let editor = CodeMirror.fromTextArea(document.getElementById('editor'));
         return (
             <div className={`background ${theme}`}>
-                <AppNavbar/>
                 <div className="editor-form">
                     <div className="tool-group">
                         <div className="button-group-vertical">
-                        {list}
+                            {list}
                         </div>
                     </div>
                     <div className="editor-group">
@@ -112,8 +110,8 @@ class Editor extends Component {
                                     rows={30}
                                     id="editor"
                                     className={`textarea ${theme}`}
-                                    onClick={event => this.handleCursorMovement(event)}
-                                    onKeyUp={event => this.handleCursorMovement(event)}
+                                    onClick={this.handleCursorMovement}
+                                    onKeyUp={this.handleCursorMovement}
                                     onChange={this.handleTextArea}/>
                             </FormGroup>
                             <FormGroup>
@@ -146,4 +144,4 @@ const actions = {
     fetchPdf: fetchPdf
 }
 
-export default connect(mapState, actions)(withRouter(Editor));
+export default withRouter(connect(mapState, actions)(Editor));

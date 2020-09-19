@@ -5,7 +5,7 @@ import {Container} from 'reactstrap';
 import config from "../appconfig.json";
 import {connect} from "react-redux";
 import {fetchElements} from "../utils/actions";
-import {loading} from "../utils/templates/loading";
+import {loading} from "./props/loading";
 
 class About extends Component {
 
@@ -22,7 +22,6 @@ class About extends Component {
         });
         return (
             <div className={`background ${theme}`}>
-                <AppNavbar/>
                 <Container fluid>
                     <h2>Logic Gate Schematic Language</h2>
                     <p>Simple language for creating complicated schemes with logic gates</p>
@@ -45,4 +44,4 @@ const actions = {
     fetchElements: fetchElements
 }
 
-export default connect(mapState, actions)(withRouter(About));
+export default withRouter(connect(mapState, actions)(About));

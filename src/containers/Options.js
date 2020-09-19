@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
 import {withRouter} from 'react-router-dom';
 import {Container} from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {darkTheme, managePreview} from "../utils/actions";
+import {managePreview} from "../utils/actions";
 
 class Options extends Component {
 
@@ -28,7 +27,6 @@ class Options extends Component {
         const {theme} = this.state;
         return (
             <div className={`background ${theme}`}>
-                <AppNavbar/>
                 <Container fluid>
                     <div>
                         <h3 className="button-group-vertical"> Theme:
@@ -52,4 +50,4 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({managePreview: managePreview}, dispatch)
 }
 
-export default connect(null, matchDispatchToProps)(withRouter(Options));
+export default withRouter(connect(null, matchDispatchToProps)(Options));

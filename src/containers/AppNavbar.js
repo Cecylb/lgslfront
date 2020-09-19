@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import logo from '../images/logo.png'
 import { Button, Container } from 'reactstrap';
 import '../styles/AppNavbar.css';
 import config from "../appconfig.json";
+import {connect} from "react-redux";
 
-export default class AppNavbar extends Component {
+class AppNavbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,10 +31,17 @@ export default class AppNavbar extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                 <Container fluid>
-                    <Link to="/editor"><Button color="light" outline="danger" className="editor">Create new scheme</Button></Link>
-                    <Link to="/options"> <Button color="light" outline="danger" className="options">Options</Button></Link>
-                    <Link to="/about"><Button color="light" outline="danger" className="about">About</Button></Link>
+                    <Link to="/editor"><Button color="light" outline className="editor">Create new scheme</Button></Link>
+                    <Link to="/options"> <Button color="light" outline className="options">Options</Button></Link>
+                    <Link to="/about"><Button color="light" outline className="about">About</Button></Link>
                 </Container>
+                    <NavItem>
+                        <NavLink
+                            href='/login' style={{color: 'white'}}>{
+                                this.props.user.loggedIn
+                                    ? `Welcome, ${this.props.user.username}`
+                                    : 'Login' }</NavLink>
+                    </NavItem>
                     <NavItem>
                         <NavLink
                             href={config.links.twitter} style={{color: 'deepSkyBlue'}}>Twitter</NavLink>
@@ -46,3 +54,11 @@ export default class AppNavbar extends Component {
         </Navbar>;
     }
 }
+
+function mapState(state) {
+    return {
+        user: state.fetchReducer.user
+    }
+}
+
+export default connect(mapState)(withRouter(AppNavbar))

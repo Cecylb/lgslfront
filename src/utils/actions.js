@@ -7,6 +7,9 @@ export const FETCH_TEMPLATE = 'FETCH_TEMPLATE'
 export const REQUEST_TEMPLATE = 'REQUEST_TEMPLATE'
 export const REQUEST_PDF = 'REQUEST_PDF'
 export const FETCH_PDF = 'FETCH_PDF'
+export const REQUEST_USER = 'REQUEST_USER'
+export const FETCH_USER = 'FETCH_USER'
+export const LOGOUT = 'LOGOUT'
 
 export function managePreview(boolean) {
     return {
@@ -40,9 +43,26 @@ export function fetchTemplate(element) {
     }
 }
 
-export function  fetchPdf(input) {
+export function fetchPdf(input) {
     return {
         type: REQUEST_PDF,
         input: input
+    }
+}
+
+export function fetchUser(login, password) {
+    console.log("FETCH", login)
+    return {
+        type: REQUEST_USER,
+        userInfo: {
+            login: login,
+            password: password
+        }
+    }
+}
+
+export function logout() {
+    return {
+        type: LOGOUT
     }
 }

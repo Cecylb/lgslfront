@@ -1,4 +1,4 @@
-import {HIDE_LOADER, PREVIEW_MANAGED, SHOW_LOADER, THEME_SELECTED} from "../actions";
+import {HIDE_LOADER, PREVIEW_MANAGED, SHOW_LOADER} from "../actions";
 
 const initialState = {
     loading: false,
