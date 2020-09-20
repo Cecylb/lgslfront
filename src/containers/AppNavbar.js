@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import {Link, withRouter} from 'react-router-dom';
-import logo from '../images/logo.png'
-import { Button, Container } from 'reactstrap';
+import { Collapse, Nav, Navbar, NavbarToggler } from 'reactstrap';
+import {withRouter} from 'react-router-dom';
+import logoLgsl from '../images/logo.png'
 import '../styles/AppNavbar.css';
-import config from "../appconfig.json";
 import {connect} from "react-redux";
+import {github, login, logo, menubar, twitter} from "./navbar/links";
 
 class AppNavbar extends Component {
     constructor(props) {
@@ -23,35 +22,19 @@ class AppNavbar extends Component {
     }
 
     render() {
-        return <Navbar color='secondary' light expand="md">
-            <NavbarBrand tag={Link} to="/">
-                <img src={logo} width="15%" alt="Home"/>
-            </NavbarBrand>
+        const navbar = <Navbar color='secondary' light expand="md">
+            {logo(logoLgsl)}
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
-                <Container fluid>
-                    <Link to="/editor"><Button color="light" outline className="editor">Create new scheme</Button></Link>
-                    <Link to="/options"> <Button color="light" outline className="options">Options</Button></Link>
-                    <Link to="/about"><Button color="light" outline className="about">About</Button></Link>
-                </Container>
-                    <NavItem>
-                        <NavLink
-                            href='/login' style={{color: 'white'}}>{
-                                this.props.user.loggedIn
-                                    ? `Welcome, ${this.props.user.username}`
-                                    : 'Login' }</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink
-                            href={config.links.twitter} style={{color: 'deepSkyBlue'}}>Twitter</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink href={config.links.github} style={{color: 'gold'}}>GitHub</NavLink>
-                    </NavItem>
+                    {menubar(this.props.user.loggedIn)}
+                    {login(this.props.user.loggedIn, this.props.user.username)}
+                    {twitter()}
+                    {github()}
                 </Nav>
             </Collapse>
         </Navbar>;
+        return navbar;
     }
 }
 

@@ -7,6 +7,7 @@ import Options from "./Options";
 import About from "./About";
 import Login from "./Login";
 import AppNavbar from "./AppNavbar";
+import Load from "./Load";
 
 class App extends Component {
 
@@ -21,6 +22,7 @@ class App extends Component {
                     <Route path='/options' exact={true} component={Options}/>
                     <Route path='/about' exact={true} component={About}/>
                     <Route path='/login' exact={true} component={Login}/>
+                    <Route path='/load' exact={true} component={Load}/>
                 </Switch>
             </div>
         </Router>
