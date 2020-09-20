@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Form, FormGroup} from 'reactstrap';
 import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
 import {connect} from "react-redux";
@@ -8,6 +7,8 @@ import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import {loading} from "./props/loading";
 import {preview} from "./editor/preview";
+import {editor} from "./editor/editor";
+import {elements} from "./editor/elements";
 
 class Editor extends Component {
 
@@ -21,9 +22,6 @@ class Editor extends Component {
             panel: false,
             didSubmit: false};
         this.props.fetchElements();
-        this.handleTextArea = this.handleTextArea.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCursorMovement = this.handleCursorMovement.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,39 +31,6 @@ class Editor extends Component {
         if(this.props.template !== prevProps.template) {
             this.setState({panel: true});
         }
-    }
-
-    handleTextArea(event) {
-        this.setState({
-            input: event.target.value
-        });
-    }
-
-    handleElement(element) {
-        this.props.fetchTemplate(element);
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.props.fetchPdf(this.state.input);
-        this.setState({didSubmit: true});
-    }
-
-    async handleDownload(data) {
-        let binaryData = [];
-        binaryData.push(data);
-        const pdf = new Blob(binaryData, {type: 'application/pdf'});
-        const blobUrl = URL.createObjectURL(pdf);
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = 'scheme.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    handleCursorMovement(event) {
-        this.setState({cursor: event.target.selectionStart});
     }
 
     setTemplate(cursor, input) {
@@ -85,43 +50,15 @@ class Editor extends Component {
     render() {
         const theme = localStorage.getItem('theme');
         if(this.props.loading) return loading(theme);
-        const {input, didSubmit, cursor, data} = this.state;
-        const list = this.props.elements.map(element => {
-            return <button className={`button-link ${theme}`}
-                           onClick={() => this.handleElement(element)}>{element}</button>
-        });
+        const {input, cursor, data} = this.state;
         {this.state.panel && this.setTemplate(cursor, input)}
-        const pdf = preview(this.props.preview && data.length !== 0, data);
         //let editor = CodeMirror.fromTextArea(document.getElementById('editor'));
         return (
             <div className={`background ${theme}`}>
                 <div className="editor-form">
-                    <div className="tool-group">
-                        <div className="button-group-vertical">
-                            {list}
-                        </div>
-                    </div>
-                    <div className="editor-group">
-                        <Form>
-                            <FormGroup>
-                                <textarea
-                                    value={input}
-                                    options={{mode: 'xml', lineNumbers: true}}
-                                    rows={30}
-                                    id="editor"
-                                    className={`textarea ${theme}`}
-                                    onClick={this.handleCursorMovement}
-                                    onKeyUp={this.handleCursorMovement}
-                                    onChange={this.handleTextArea}/>
-                            </FormGroup>
-                            <FormGroup>
-                                <Button color="success" onClick={this.handleSubmit} type="submit">Compile</Button>{' '}
-                                <Button color="secondary" onClick={() => this.setState({input: ""})} to="/editor">Clear</Button>{' '}
-                                <Button color="primary" onClick={() => this.handleDownload(data)} disabled={!didSubmit}  to="/editor">Download</Button>
-                            </FormGroup>
-                        </Form>
-                    </div>
-                    {pdf}
+                    {elements(this)}
+                    {editor(this)}
+                    {preview(this.props.preview && data.length !== 0, data)}
                 </div>
             </div>
         )
