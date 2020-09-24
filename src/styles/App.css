@@ -140,6 +140,19 @@
   margin-bottom: 0;
 }
 
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

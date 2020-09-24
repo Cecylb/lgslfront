@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
 import {Container} from 'reactstrap';
-import {withRouter} from "react-router-dom";;
+import {withRouter} from "react-router-dom";
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            theme: localStorage.getItem('theme')
+        }
     }
 
     render() {
-        const theme = localStorage.getItem('theme');
+        const {theme} = this.state;
         return (
             <div className={`background ${theme}`}>
                 <Container fluid>

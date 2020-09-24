@@ -1,7 +1,7 @@
 import React from "react";
 
 export const elements = (event) => {
-    const theme = localStorage.getItem('theme');
+    const {theme} =  event.state;
     return (
         <div className="tool-group">
             <div className="button-group-vertical">

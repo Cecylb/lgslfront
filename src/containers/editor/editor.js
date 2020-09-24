@@ -1,22 +1,23 @@
 import {Button, Form, FormGroup} from "reactstrap";
+import {Controlled as CodeMirror} from 'react-codemirror2'
 import React from "react";
 
 export const editor = (editor) => {
-    const theme = localStorage.getItem('theme');
-    const {input, data, didSubmit} = editor.state;
+    const {input, data, theme, didSubmit} = editor.state;
+    //let editor = CodeMirror.fromTextArea(document.getElementById('editor'));
     return (
         <div className="editor-group">
             <Form>
                 <FormGroup>
-                                <textarea
-                                    value={input}
-                                    options={{mode: 'xml', lineNumbers: true}}
-                                    rows={30}
-                                    id="editor"
-                                    className={`textarea ${theme}`}
-                                    onClick={event => handleCursorMovement(editor, event)}
-                                    onKeyUp={event => handleCursorMovement(editor, event)}
-                                    onChange={event => handleTextArea(editor, event)}/>
+                    <textarea
+                        value={input}
+                        options={{mode: 'xml', lineNumbers: true}}
+                        rows={30}
+                        id="editor"
+                        className={`textarea ${theme}`}
+                        onClick={event => handleCursorMovement(editor, event)}
+                        onKeyUp={event => handleCursorMovement(editor, event)}
+                        onChange={event => handleTextArea(editor, event)}/>
                 </FormGroup>
                 <FormGroup>
                     <Button color="success" onClick={event => handleSubmit(editor, event)} type="submit">Compile</Button>{' '}
@@ -33,11 +34,10 @@ function clearInput(editor) {
 }
 
 async function handleDownload(data) {
-    //todo файл поломался после аксиоса
     let binaryData = [];
     binaryData.push(data);
     const pdf = new Blob(binaryData, {type: 'application/pdf'});
-    const blobUrl = URL.createObjectURL(pdf);
+    const blobUrl = URL.createObjectURL(data);
     const link = document.createElement("a");
     link.href = blobUrl;
     link.download = 'scheme.pdf';

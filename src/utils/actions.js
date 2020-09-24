@@ -51,7 +51,6 @@ export function fetchPdf(input) {
 }
 
 export function fetchUser(login, password) {
-    console.log("FETCH", login)
     return {
         type: REQUEST_USER,
         userInfo: {

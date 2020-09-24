@@ -18,7 +18,7 @@ export function fetchPdf(input) {
         },
         data: JSON.stringify(input),
         responseType: "arraybuffer"
-    }).then(function (response) { console.log("RESPONSE", response); return response })
+    }).then(function (response) { return new Blob([response.data]) })
 }
 
 export function fetchUser(userInfo) {

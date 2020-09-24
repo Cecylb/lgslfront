@@ -38,7 +38,6 @@ function* requestPdf(action) {
 }
 
 function* requestUser(action) {
-    console.log("SAGA");
     const payload = yield call(fetchUser, action.userInfo);
     yield put( {type: FETCH_USER, payload});
 }

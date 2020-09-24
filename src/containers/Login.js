@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import {Redirect, withRouter} from 'react-router-dom';
-import {Button} from "reactstrap";
 import {connect} from "react-redux";
 import {fetchUser} from "../utils/actions";
 
@@ -9,6 +8,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            theme: localStorage.getItem('theme'),
             login: "",
             password: "",
             user: props.user
@@ -24,7 +24,6 @@ class Login extends Component {
     }
 
     handleSubmit(event) {
-        console.log("HERE?")
         event.preventDefault();
         this.props.fetchUser(this.state.login, this.state.password);
     }
@@ -37,22 +36,26 @@ class Login extends Component {
     }
 
     render() {
-        const theme = localStorage.getItem('theme');
-        console.log("LOGGED", this.state.user.loggedIn);
-        if(this.state.user.loggedIn) {
+        const {theme, user} = this.state;
+        if(user.loggedIn) {
             return <Redirect to="/"/>
         }
         return (
             <div className={`background ${theme}`}>
-                <div>
-                    <form onSubmit={this.handleSubmit}>
+                <div className='text-center'>
+                    <form className='form-signin' onSubmit={this.handleSubmit}>
+                        <h3> Sign in to access saved code</h3>
                         <input
+                            className='form-control'
                             type='text'
+                            pattern='(?=.*[a-zA-Z0-9]).{4,16}'
+x                           title='login should contain 4-16 symbols of plain letters and numbers'
                             placeholder='login . . .'
                             name='login'
                             onChange={this.handleChange}
                             required/>
                         <input
+                            className='form-control'
                             type='password'
                             pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}'
                             title='password must contain 8-16 symbols both of upper and lower case and a number'
@@ -60,7 +63,13 @@ class Login extends Component {
                             name='password'
                             onChange={this.handleChange}
                             required/>
-                        <Button color="success" type="submit">Login</Button>
+                        <div class='checkBox mb-3'>
+                            <label>
+                                <input type='checkBox' value='remember-me'/> Remember me
+
+                            </label>
+                        </div>
+                        <button class='btn btn-lg btn-primary btn-block' type="submit">Sign in</button>
                     </form>
                 </div>
             </div>

@@ -4,7 +4,6 @@ import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
 import {connect} from "react-redux";
 import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
-import {Controlled as CodeMirror} from 'react-codemirror2'
 import {loading} from "./props/loading";
 import {preview} from "./editor/preview";
 import {editor} from "./editor/editor";
@@ -15,6 +14,7 @@ class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            theme:  localStorage.getItem('theme'),
             elements: [],
             data: [],
             input: "",
@@ -48,11 +48,9 @@ class Editor extends Component {
     }
 
     render() {
-        const theme = localStorage.getItem('theme');
+        const {input, cursor, data, theme} = this.state;
         if(this.props.loading) return loading(theme);
-        const {input, cursor, data} = this.state;
         {this.state.panel && this.setTemplate(cursor, input)}
-        //let editor = CodeMirror.fromTextArea(document.getElementById('editor'));
         return (
             <div className={`background ${theme}`}>
                 <div className="editor-form">
