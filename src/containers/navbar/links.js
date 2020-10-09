@@ -38,6 +38,7 @@ export const login = (loggedIn, username) => {
         </NavItem>
     )
 }
+
 export const twitter = () => {
     return (
         <NavItem>

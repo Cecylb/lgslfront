@@ -4,10 +4,10 @@ import '../styles/DarkTheme.css';
 import '../styles/LightTheme.css';
 import {connect} from "react-redux";
 import {fetchElements, fetchPdf, fetchTemplate} from "../utils/actions";
-import {loading} from "./props/loading";
 import {preview} from "./editor/preview";
 import {editor} from "./editor/editor";
 import {elements} from "./editor/elements";
+import ShowAlert from "./props/alert";
 
 class Editor extends Component {
 
@@ -48,15 +48,15 @@ class Editor extends Component {
     }
 
     render() {
-        const {input, cursor, data, theme} = this.state;
-        if(this.props.loading) return loading(theme);
+        const {input, cursor, theme} = this.state;
         {this.state.panel && this.setTemplate(cursor, input)}
         return (
             <div className={`background ${theme}`}>
+                {this.props.alert ? <ShowAlert/> : null}
                 <div className="editor-form">
                     {elements(this)}
                     {editor(this)}
-                    {preview(this.props.preview && data.length !== 0, data)}
+                    {preview(this)}
                 </div>
             </div>
         )
@@ -67,6 +67,7 @@ function mapState(state) {
     return {
         preview: state.app.preview,
         loading: state.app.loading,
+        alert: state.app.alert,
         elements: state.fetchReducer.elements,
         template: state.fetchReducer.template,
         pdf: state.fetchReducer.pdf

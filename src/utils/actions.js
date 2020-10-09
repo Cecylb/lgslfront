@@ -1,6 +1,8 @@
 export const PREVIEW_MANAGED = 'PREVIEW_MANAGED'
 export const SHOW_LOADER = 'SHOW_LOADER'
 export const HIDE_LOADER = 'HIDE_LOADER'
+export const SHOW_ALERT = 'SHOW_ALERT'
+export const HIDE_ALERT = 'HIDE_ALERT'
 export const FETCH_ELEMENTS = 'FETCH_ELEMENTS'
 export const REQUEST_ELEMENTS = 'REQUEST_ELEMENTS'
 export const FETCH_TEMPLATE = 'FETCH_TEMPLATE'
@@ -27,6 +29,18 @@ export function showLoader() {
 export function hideLoader() {
     return {
         type: HIDE_LOADER
+    }
+}
+
+export function showAlert() {
+    return {
+        type: SHOW_ALERT
+    }
+}
+
+export function hideAlert() {
+    return {
+        type: HIDE_ALERT
     }
 }
 

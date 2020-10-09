@@ -10,6 +10,8 @@ import {
     FETCH_USER,
     hideLoader,
     showLoader,
+    showAlert,
+    hideAlert,
 } from "./actions";
 import {fetchElements, fetchTemplate, fetchPdf, fetchUser} from "./fetchFunctions";
 
@@ -22,19 +24,36 @@ export default function* sagaWatcher() {
 
 function* requestElements() {
     yield put(showLoader());
-    const payload = yield call(fetchElements);
-    yield put({type: FETCH_ELEMENTS, payload});
-    yield put(hideLoader());
+    try {
+        const payload = yield call(fetchElements);
+        yield put({type: FETCH_ELEMENTS, payload});
+        yield put(hideAlert());
+        yield put(hideLoader());
+    } catch (error) {
+        yield put(showAlert());
+    }
 }
 
 function* requestTemplate(action) {
-    const payload = yield call(fetchTemplate, action.element);
-    yield put({type: FETCH_TEMPLATE, payload});
+    try {
+        const payload = yield call(fetchTemplate, action.element);
+        yield put({type: FETCH_TEMPLATE, payload});
+        yield put(hideAlert());
+    } catch (error) {
+        yield put(showAlert());
+    }
 }
 
 function* requestPdf(action) {
-    const payload = yield call(fetchPdf, action.input);
-    yield put({type: FETCH_PDF, payload});
+    yield put(showLoader());
+    try {
+        const payload = yield call(fetchPdf, action.input);
+        yield put({type: FETCH_PDF, payload});
+        yield put(hideAlert());
+        yield put(hideLoader());
+    } catch (error) {
+        yield put(showAlert());
+    }
 }
 
 function* requestUser(action) {

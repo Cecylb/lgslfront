@@ -1,14 +1,20 @@
 import React from "react";
+import {loading} from "../props/loading";
 
-export const elements = (event) => {
-    const {theme} =  event.state;
+export const elements = (editor) => {
+    const {theme} =  editor.state;
+    if(editor.props.loading) return (
+        <div className="tool-group">
+            {loading(theme)}
+        </div>
+    )
     return (
         <div className="tool-group">
             <div className="button-group-vertical">
                 {
-                    event.props.elements.map(element => {
+                    editor.props.elements.map(element => {
                         return <button className={`button-link ${theme}`}
-                                       onClick={() => handleElement(event, element)}>{element}</button>
+                                       onClick={() => handleElement(editor, element)}>{element}</button>
                     })
                 }
             </div>
@@ -16,6 +22,6 @@ export const elements = (event) => {
     )
 }
 
-function handleElement(event, element) {
-    event.props.fetchTemplate(element);
+function handleElement(editor, element) {
+    editor.props.fetchTemplate(element);
 }

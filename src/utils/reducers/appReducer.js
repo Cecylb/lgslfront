@@ -1,7 +1,8 @@
-import {HIDE_LOADER, PREVIEW_MANAGED, SHOW_LOADER} from "../actions";
+import {HIDE_ALERT, HIDE_LOADER, PREVIEW_MANAGED, SHOW_ALERT, SHOW_LOADER} from "../actions";
 
 const initialState = {
-    loading: false,
+    loading: true,
+    alert: false,
     preview: true
 }
 
@@ -11,6 +12,10 @@ export const appReducer = (state = initialState, action) => {
             return {...state, loading: true}
         case HIDE_LOADER:
             return {...state, loading: false}
+        case SHOW_ALERT:
+            return {...state, alert: true}
+        case HIDE_ALERT:
+            return {...state, alert: false}
         case PREVIEW_MANAGED:
             return {...state, preview: action.payload}
         default: return state
